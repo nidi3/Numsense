@@ -50,7 +50,7 @@ let rec internal positive x =
         | Between 50 60 x -> (onesAsTensPrefix x) + "füfzg"
         | Between 60 70 x -> (onesAsTensPrefix x) + "sächzg"
         | Between 70 80 x -> (onesAsTensPrefix x) + "sibezg"
-        | 80 -> sprintf "achtzg"
+        | 80 -> "achtzg"
         | Between 81 90 x -> (onesAsTensPrefix x) + "nachtzg"
         | Between 90 100 x -> (onesAsTensPrefix x) + "nünzg"
 
@@ -75,10 +75,9 @@ let rec internal positive x =
 
     let big factor (name: string) x =
         let plural = if name.EndsWith "e" then name else name + "e"
-        let start =
-            if (x / factor) = 1
-                then "ei " + name
-                else (positive (x / factor)) + " " + plural
+        let start =  if (x / factor) = 1
+            then "ei " + name
+            else (positive (x / factor)) + " " + plural
         let rest = positive (x % factor)
         if (rest = "") then start else start + " " + rest
 
