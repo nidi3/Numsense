@@ -60,7 +60,8 @@
     <Compile Include="DutchExamples.fs" />
     <Compile Include="RussianExamples.fs" />
     <Compile Include="CatalanExamples.fs" />
-    <Compile Include="Demo.fs" />
+    <Compile Include="SwissGermanExamples.fs" />
+    <Content Include="Demo.fs" />
     <Content Include="packages.config" />
     <Content Include="App.config" />
   </ItemGroup>

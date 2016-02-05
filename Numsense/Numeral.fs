@@ -21,3 +21,6 @@ let tryParseRussian = Russian.tryParseRussianImp
 
 let toCatalan       = Catalan.toCatalanImp
 let tryParseCatalan = Catalan.tryParseCatalanImp
+
+let toBernese       = SwissGerman.toBerneseImp
+let tryParseBernese = SwissGerman.tryParseBerneseImp
