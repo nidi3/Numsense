@@ -5,6 +5,11 @@ let internal (|StartsWith|_|) prefix (candidate : string) =
     then Some (candidate.Substring prefix.Length)
     else None
 
+let internal (|EndsWith|_|) suffix (candidate : string) =
+    if candidate.EndsWith suffix
+    then Some (candidate.[0 .. candidate.Length - suffix.Length - 1])
+    else None
+
 let internal (|Between|_|) lower upper candidate =
     if lower <= candidate && candidate < upper
     then Some candidate

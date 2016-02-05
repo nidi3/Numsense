@@ -108,3 +108,18 @@ let ``negative Catalan is the inverse of positive Catalan`` x =
 
     sprintf "menys %s" (Numeral.toCatalan x) =! actualCatalan
     Some -x =! actualInteger
+
+[<Property(QuietOnSuccess = true)>]
+let ``tryParseBernese is the inverse of toBernese`` x =
+    test <@ Some x = (x |> Numeral.toBernese |> Numeral.tryParseBernese) @>
+
+[<Property(QuietOnSuccess = true)>]
+let ``negative Bernese is the inverse of positive Bernese`` x =
+    x <> 0 ==> lazy
+    let x = abs x
+
+    let actualBernese = Numeral.toBernese -x
+    let actualInteger = Numeral.tryParseBernese actualBernese
+
+    sprintf "%s unger null" (Numeral.toBernese x) =! actualBernese
+    Some -x =! actualInteger

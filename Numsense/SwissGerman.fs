@@ -75,7 +75,8 @@ let rec internal positive x =
 
     let big factor (name: string) x =
         let plural = if name.EndsWith "e" then name else name + "e"
-        let start =  if (x / factor) = 1
+        let start = 
+            if (x / factor) = 1
             then "ei " + name
             else (positive (x / factor)) + " " + plural
         let rest = positive (x % factor)
@@ -101,40 +102,68 @@ let internal tryParseBerneseImp (x : string) =
     let rec conv acc candidate =
         match candidate with
         | ""                      -> Some acc
-        | StartsWith "-"        t
-        | StartsWith "AND"      t -> conv                acc  t
-        | StartsWith "ZERO"     t -> conv          (0  + acc) t
-        | StartsWith "ONE"      t -> conv          (1  + acc) t
-        | StartsWith "TWO"      t -> conv          (2  + acc) t
-        | StartsWith "THREE"    t -> conv          (3  + acc) t
-        | StartsWith "FOUR"     t -> conv          (4  + acc) t
-        | StartsWith "FIVE"     t -> conv          (5  + acc) t
-        | StartsWith "SIX"      t -> conv          (6  + acc) t
-        | StartsWith "SEVEN"    t -> conv          (7  + acc) t
-        | StartsWith "EIGHT"    t -> conv          (8  + acc) t
-        | StartsWith "NINE"     t -> conv          (9  + acc) t
-        | StartsWith "TEN"      t -> conv         (10  + acc) t
-        | StartsWith "ELEVEN"   t -> conv         (11  + acc) t
-        | StartsWith "TWELVE"   t -> conv         (12  + acc) t
-        | StartsWith "THIRTEEN" t -> conv         (13  + acc) t
-        | StartsWith "FIFTEEN"  t -> conv         (15  + acc) t
-        | StartsWith "EEN"      t // matches 'een' in 'eighteen'
-        | StartsWith "TEEN"     t -> conv         (10  + acc) t
-        | StartsWith "TWENTY"   t -> conv         (20  + acc) t
-        | StartsWith "THIRTY"   t -> conv         (30  + acc) t
-        | StartsWith "FORTY"    t -> conv         (40  + acc) t
-        | StartsWith "FIFTY"    t -> conv         (50  + acc) t
-        | StartsWith "Y"        t // matches 'y' in 'eighty'
-        | StartsWith "TY"       t -> conv         (10 %* acc) t
-        | StartsWith "HUNDRED"  t ->
-            conv (if acc = 0 then  100 else       100 %* acc) t
-        | StartsWith "THOUSAND" t ->
-            conv (if acc = 0 then 1000 else      1000 %* acc) t
-        | StartsWith "MILLION"  t -> conv    (1000000 %* acc) t
-        | StartsWith "BILLION"  t -> conv (1000000000  * acc) t
-        | _ -> None
 
-    let canonicalized = x.Trim().ToUpper(System.Globalization.CultureInfo "en")
+        | StartsWith "zäh"      t -> conv         (10  + acc) t
+        | StartsWith "öuf"      t -> conv         (11  + acc) t
+        | StartsWith "zwöuf"    t -> conv         (12  + acc) t
+        | StartsWith "drizäh"   t -> conv         (13  + acc) t
+        | StartsWith "vierzäh"  t -> conv         (14  + acc) t
+        | StartsWith "füfzäh"   t -> conv         (15  + acc) t
+        | StartsWith "sächzäh"  t -> conv         (16  + acc) t
+        | StartsWith "sibezäh"  t -> conv         (17  + acc) t
+        | StartsWith "achtzäh"  t -> conv         (18  + acc) t
+        | StartsWith "nünzäh"   t -> conv         (19  + acc) t
+
+        | StartsWith "eine"     t -> conv          (1  + acc) t
+        | StartsWith "zwöie"    t -> conv          (2  + acc) t
+        | StartsWith "drüe"     t -> conv          (3  + acc) t
+        | StartsWith "viere"    t -> conv          (4  + acc) t
+        | StartsWith "föife"    t -> conv          (5  + acc) t
+        | StartsWith "sächse"   t -> conv          (6  + acc) t
+        | StartsWith "sibene"   t -> conv          (7  + acc) t
+        | StartsWith "achte"    t -> conv          (8  + acc) t
+        | StartsWith "nüne"     t -> conv          (9  + acc) t
+
+        | StartsWith "zwänzg"   t -> conv         (20  + acc) t
+        | StartsWith "drissg"   t -> conv         (30  + acc) t
+        | StartsWith "vierzg"   t -> conv         (40  + acc) t
+        | StartsWith "füfzg"    t -> conv         (50  + acc) t
+        | StartsWith "sächzg"   t -> conv         (60  + acc) t
+        | StartsWith "sibezg"   t -> conv         (70  + acc) t
+        | StartsWith "achtzg"   t -> conv         (80  + acc) t
+        | StartsWith "nachtzg"  t -> conv         (80  + acc) t
+        | StartsWith "nünzg"    t -> conv         (90  + acc) t
+
+        | StartsWith "null"     t -> conv          (0  + acc) t
+        | StartsWith "eis"      t -> conv          (1  + acc) t
+        | StartsWith "zwöi"     t -> conv          (2  + acc) t
+        | StartsWith "drü"      t -> conv          (3  + acc) t
+        | StartsWith "vier"     t -> conv          (4  + acc) t
+        | StartsWith "föif"     t -> conv          (5  + acc) t
+        | StartsWith "sächs"    t -> conv          (6  + acc) t
+        | StartsWith "sibe"     t -> conv          (7  + acc) t
+        | StartsWith "acht"     t -> conv          (8  + acc) t
+        | StartsWith "nün"      t -> conv          (9  + acc) t
+
+        | StartsWith "hundert"  t ->
+            conv (if acc = 0 then  100 else       100 %* acc) t
+        | StartsWith "tusig" t ->
+            conv (if acc = 0 then 1000 else      1000 %* acc) t
+        | StartsWith " millione " t
+        | StartsWith " millione" t
+        | StartsWith " million " t
+        | StartsWith " million"  t ->
+            conv (if acc = 0 then 1000000 else 1000000 %* acc) t
+        | StartsWith " milliarde "  t
+        | StartsWith " milliarde"  t ->
+            conv (if acc = 0 then 1000000000 else 1000000000 %* acc) t
+
+        | StartsWith "ei"       t
+        | StartsWith "und"      t -> conv                acc  t
+
+        | _                       -> None
+
+    let canonicalized = x.Trim().ToLower(System.Globalization.CultureInfo "en")
     match canonicalized with
-    | StartsWith "MINUS" t -> conv 0 (t.Trim ()) |> Option.map ((*)-1)
+    | EndsWith " unger null" t -> conv 0 (t.Trim ()) |> Option.map ((*)-1)
     | _ -> conv 0 canonicalized

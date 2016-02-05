@@ -108,5 +108,20 @@ namespace Ploeh.Numsense.UnitTests
             var actual = Numeral.Catalan;
             Assert.Same(expected, actual);
         }
+
+        [Fact]
+        public void BerneseIsCorrect()
+        {
+            var actual = Numeral.Bernese;
+            Assert.IsAssignableFrom<BerneseNumeralConverter>(actual);
+        }
+
+        [Fact]
+        public void BerneseIsSingleton()
+        {
+            var expected = Numeral.Bernese;
+            var actual = Numeral.Bernese;
+            Assert.Same(expected, actual);
+        }
     }
 }
